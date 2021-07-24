@@ -7,7 +7,7 @@
 *  |  Released under BDS License                                               |
 *  +---------------------------------------------------------------------------+ */
 
-// includiamo le variabili necessarie
+// includiamo le librerie necessarie
 #include <iostream>
 #include <cstdio>
 #include <vector>
@@ -37,9 +37,7 @@ void SommaNumeriAtomica(const std::vector<int> &_da_sommare, int _start_idx, int
     // costruisco un ciclo che iniziando da uno specifico indice, 
 	// somma i numeri del vettore fino all'indice finale
 	for (int i = _start_idx; i <= _end_idx; i++)
-	{	
 		ag_sum += _da_sommare[i];
-	}
 }
 
 
@@ -108,7 +106,7 @@ int main()
 	std::cout << "Premi invio per continuare"<<std::endl;
     std::cin.ignore(); 
 	
-	// somma i numeri usando i thread
+	// somma i numeri usando i thread sulla variabile atomica
 	std::thread a1(SommaNumeriAtomica, da_sommare, 0, int(dimensione/3) -1);
 	std::thread a2(SommaNumeriAtomica, da_sommare, int(dimensione/3), 2*int(dimensione/3)-1);
 	std::thread a3(SommaNumeriAtomica, da_sommare, 2*int(dimensione/3), dimensione-1);
