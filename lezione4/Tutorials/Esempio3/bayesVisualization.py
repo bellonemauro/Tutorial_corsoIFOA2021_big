@@ -173,7 +173,8 @@ un test con esito positivo e la probabilità di essere negativo avendo ricevuto 
 
 
 ---------------------------------------------------------------------
-Software rilasciato su licenza BDS./n 
+Software rilasciato su licenza BDS.
+
 Autore: Mauro Bellone, http://www.maurobellone.com
 
 """
