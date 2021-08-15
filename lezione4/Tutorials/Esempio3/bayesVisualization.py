@@ -138,7 +138,7 @@ Questa applicazione visualizza facilmente gli effetti di un test diagnostico
 su una popolazione usando la [legge di Bayes](https://en.wikipedia.org/wiki/Bayes%27_theorem). 
 
 Dati due eventi indipendenti $A$ e $B$ la legge di Bayes ci dice che la probabilità condizionata 
-della verificazione dell'evento $A$, dato che l'evento $B$ si è verificato, è calcolabile come: 
+di verificazione dell'evento $A$, dato che l'evento $B$ si è verificato, è calcolabile come: 
 
 $P(A|B) = P(B|A) * P(A) / P(B)$
 
@@ -147,11 +147,14 @@ Dove:
 - $P(B)$ è la probabilità di verificazione dell'evento $B$
 - $P(B|A)$ è la probabilità di verificazione dell'evento $B$ dato l'evento $A$ verificato
 
-Un esempio analogo è disponibile su [wikipedia](https://en.wikipedia.org/wiki/Bayes%27_theorem#Drug_testing)
-per la determinazione della probabilità di essere positivi in un drug test data la positività del test.
+Un esempio analogo è disponibile su wikipedia
+per la determinazione della probabilità di essere positivi in un
+[drig test](https://en.wikipedia.org/wiki/Bayes%27_theorem#Drug_testing)
+data l'esito positivo del test.
 
-Supponiamo quindi di avere una popolazione di N soggetti i quali devono eseguire un test 
-di positività ad una patologia (es. Maurite). La maurite ha una incidenza sulla popolazione 
+## Problema
+Supponiamo di eseguire un test diagnostico su una popolazione di N soggetti per la ricerca di 
+una patologia (es. Maurite). La maurite ha una incidenza sulla popolazione 
 regolabile usando l'indicatore -incidenza- che rappresenta la percentuale di popolazione che 
 effettivamente ha la maurite (valore di default 10%). 
 
@@ -161,12 +164,12 @@ La probabilità di risultare positivo al test diagnostico per un soggetto avente
 La probabilità di risultare negativo al test diagnostico per un soggetto sano è pari al 
 valore di specificità del test (valore di default pari al 95%).
 
-Siamo interessati a sapere qual è la probabilità per un soggetto che ha ricevuto un test 
-positivo di essere effettivamente positivo. 
+Siamo interessati a sapere qual è la probabilità, per un soggetto che ha ricevuto un test 
+con esito positivo, di essere effettivamente positivo. 
 
 Il risultato non è affatto banale e fortemente controintuitivo. 
 Questa dashboard calcola le probabilità condizionate di essere positivo avendo avuto ricevuto 
-un test con esito positivo e la probabilità di essere negativo avendo ricevuto un test con esito negativo. 
+un test con esito positivo, e la probabilità di essere negativo avendo ricevuto un test con esito negativo. 
 
 
 """
