@@ -173,7 +173,7 @@ un test con esito positivo e la probabilità di essere negativo avendo ricevuto 
 <br>
 
 ---------------------------------------------------------------------
-Software released under GNU GPL License. 
+Software released under BDS License. 
 Author: Mauro Bellone, http://www.maurobellone.com
 
 """
