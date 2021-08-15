@@ -13,20 +13,28 @@ Dipendenze:
 # Importo le librerie
 import streamlit as st
 import plotly.express as px
-import plotly.graph_objects as go #per modificare la legenda
+import plotly.graph_objects as go 
 import numpy as np
 
 
 def plot_lines (sensibilita, specificita, incidenza):
     """
     Funzione di plotting 
-    """
-         
-    numero_di_positivi = incidenza
-    numero_di_negativi = 100-incidenza
-    veri_positivi = 100*((sensibilita/100)*numero_di_positivi)/numero_di_positivi
-    falsi_positivi = 100-100*((specificita/100)*numero_di_negativi)/numero_di_negativi
     
+    I valori di sensibilità, specificità e incidenza sono considerati in percentuale
+    """
+    
+    #calcolo i parametri per la visualizzazione
+    numero_di_positivi = incidenza 
+    numero_di_negativi = 100-incidenza
+    #veri_positivi = 100*((sensibilita/100)*numero_di_positivi)/numero_di_positivi
+    #falsi_positivi = 100-(100*((specificita/100)*numero_di_negativi)/numero_di_negativi)
+   
+    veri_positivi = sensibilita*numero_di_positivi/100
+    veri_negativi = specificita*numero_di_negativi/100
+    falsi_positivi = numero_di_negativi - veri_negativi
+    falsi_negativi = numero_di_positivi - veri_positivi 
+
 
     fig = go.Figure(
         go.Scatter(
@@ -34,8 +42,7 @@ def plot_lines (sensibilita, specificita, incidenza):
               y=[0,100],
               mode='lines',
               name='incidenza positivi',
-              line=go.scatter.Line(color="red")
-              )
+              line=go.scatter.Line(color="red") )
       )
         
 
@@ -66,15 +73,13 @@ def plot_lines (sensibilita, specificita, incidenza):
         )
 
     
-
     fig.add_trace(
         go.Scatter(
             x=[incidenza,incidenza,100,100], 
             y=[0,falsi_positivi,falsi_positivi,0], 
             name='Falsi positivi',
             fill="toself", fillcolor="green", opacity=0.2)
-            
-        )
+           )
     
    
     fig.update_xaxes(showspikes=True)
@@ -82,7 +87,6 @@ def plot_lines (sensibilita, specificita, incidenza):
 
     fig.update_layout(
         height=550,
-        #title_text='Visualizzazione legge di Bayes',
         xaxis_title="Percentuale popolazione ",
         yaxis_title="Percentuale popolazione ",
     )
@@ -97,16 +101,9 @@ st.title('Dashboard dinamica per la visualizzazione della probabilità condizion
 st.sidebar.write('Regola i parametri di accuratezza del test diagnostico')
 
 sensibilita = st.sidebar.slider("Valore di sensibilità in %", 1, 100, 90)
-#st.sidebar.write('Il valore di sensibilità è: ', sensibilita, " %")
-
 specificita = st.sidebar.slider("Valore di specificità in %", 1, 100, 95)
-#st.sidebar.write('Il valore di specificità è: ', specificita, " %")
-
 incidenza = st.sidebar.slider("Valore di incidenza in %", 0, 100, 10)
-#st.sidebar.write('Il valore di incidenza è: ', incidenza, " %")
-
 dimensione_popolazione = st.sidebar.slider("Dimensione della popolazione ", 0, 1000000, 500000)
-#st.sidebar.write('La dimensione della popolazione è: ', dimensione_popolazione)
 
 
 # calcoli con parametri della sidebar
@@ -140,7 +137,7 @@ st.markdown(
 
 # Guida
 
-Questa applicazione serve a visualizzare facilmente gli effetti di un test diagnostico 
+Questa applicazione visualizza facilmente gli effetti di un test diagnostico 
 su una popolazione usando la [legge di Bayes](https://en.wikipedia.org/wiki/Bayes%27_theorem). 
 
 Dati due eventi indipendenti $A$ e $B$ la legge di Bayes ci dice che la probabilità condizionata 
