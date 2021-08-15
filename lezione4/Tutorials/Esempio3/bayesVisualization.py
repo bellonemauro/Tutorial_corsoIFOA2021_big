@@ -170,7 +170,7 @@ positivo di essere effettivamente positivo.
 Il risultato non è affatto banale e fortemente controintuitivo. 
 Questa dashboard calcola le probabilità condizionate di essere positivo avendo avuto ricevuto 
 un test con esito positivo e la probabilità di essere negativo avendo ricevuto un test con esito negativo. 
-<br>
+
 
 ---------------------------------------------------------------------
 Software released under BDS License. 
