@@ -28,8 +28,9 @@ def plot_lines (sensibilita, specificita, incidenza):
     numero_di_positivi = incidenza 
     numero_di_negativi = 100-incidenza  
     
-    veri_positivi = 100*((sensibilita/100)*numero_di_positivi)/numero_di_positivi
-    falsi_positivi = 100-100*((specificita/100)*numero_di_negativi)/numero_di_negativi
+    # questo calcolo va bene solo in questo caso in quanto il grafico è su percentuale e non su popolazione
+    veri_positivi = sensibilita
+    falsi_positivi = 100-specificita
 
 
     fig = go.Figure(
