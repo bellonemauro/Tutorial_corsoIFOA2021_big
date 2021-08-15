@@ -137,9 +137,9 @@ st.sidebar.write('Falsi negativi:', int(falsi_negativi))
 
 st.markdown(
 """
-<br>
+
 # Guida
-<br>
+
 Questa applicazione serve a visualizzare facilmente gli effetti di un test diagnostico 
 su una popolazione usando la legge di Bayes. 
 
@@ -173,8 +173,8 @@ un test con esito positivo e la probabilità di essere negativo avendo ricevuto 
 <br>
 
 ---------------------------------------------------------------------
-<sup> Software released under GNU GPL License. <br>
-Author: Mauro Bellone, <a href="http://www.maurobellone.com">www.maurobellone.com</a> <br> </sup>
+Software released under GNU GPL License. 
+Author: Mauro Bellone, http://www.maurobellone.com
 
 """
 )
