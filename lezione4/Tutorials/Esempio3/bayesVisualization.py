@@ -118,10 +118,10 @@ falsi_positivi = numero_di_negativi - veri_negativi
 falsi_negativi = numero_di_positivi - veri_positivi 
 
 probabilita_pos_dato_positivo = veri_positivi/(veri_positivi+falsi_positivi)
-st.write('Probabilita di essere positivo avendo ricevuto un test positivo:', np.round(100*probabilita_pos_dato_positivo,2), "%")
+st.write('Probabilità di essere positivo avendo ricevuto un test con esito positivo:', np.round(100*probabilita_pos_dato_positivo,2), "%")
 
 probabilita_neg_dato_negativo = veri_negativi/(veri_negativi+falsi_negativi)
-st.write('Probabilita di essere negativo avendo ricevuto un test negativo:', np.round(100*probabilita_neg_dato_negativo,2), "%")
+st.write('Probabilità di essere negativo avendo ricevuto un test con esito negativo:', np.round(100*probabilita_neg_dato_negativo,2), "%")
 
 fig = plot_lines (sensibilita, specificita, incidenza)
 st.plotly_chart(fig)
@@ -139,29 +139,36 @@ st.markdown(
 """
 # Guida
 \n
-Questa applicazione serve a visualizzare facilmente gli effetti di un test statistico 
-sulla popolazione usando la legge di Bayes. 
+Questa applicazione serve a visualizzare facilmente gli effetti di un test diagnostico 
+su una popolazione usando la legge di Bayes. 
 
-Dati due eventi indipendenti A e B la legge di Bayes ci dice che la probabilità condizionata 
-della verificazione dell'evento A dato che l'evento B si è verificato è calcolabile come: 
+Dati due eventi indipendenti $A$ e $B$ la legge di Bayes ci dice che la probabilità condizionata 
+della verificazione dell'evento $A$, dato che l'evento $B$ si è verificato, è calcolabile come: 
 
 $P(A|B) = P(B|A) * P(A) / P(B)$
+
+Dove: 
+- $P(A)$ è la probabilità di verificazione dell'evento $A$
+- $P(B)$ è la probabilità di verificazione dell'evento $B$
+- $P(B|A)$ è la probabilità di verificazione dell'evento $B$ dato l'evento $A$ verificato
 
 Supponiamo quindi di avere una popolazione di N soggetti i quali devono eseguire un test 
 di positività ad una patologia (es. Maurite). La maurite ha una incidenza sulla popolazione 
 regolabile usando l'indicatore -incidenza- che rappresenta la percentuale di popolazione che 
 effettivamente ha la maurite (valore di default 10%). 
 
-Gli scienziati hanno sviluppato un test diagnostico che riesce a rilevare la patologia. 
+Gli scienziati hanno sviluppato un test diagnostico che riesce a rilevare la maurite. 
 La probabilità di risultare positivo al test diagnostico per un soggetto avente la maurite 
 è pari al valore di sensibilità del test (valore di default 90%). 
 La probabilità di risultare negativo al test diagnostico per un soggetto sano è pari al 
-valore di specificità del test (valore di default pari al 95%)
+valore di specificità del test (valore di default pari al 95%).
 
 Siamo interessati a sapere qual è la probabilità per un soggetto che ha ricevuto un test 
-positivo di essere effettivamente positivo. Il risultato non è affatto banale e fortemente
-controintuitivo. Questa dashboard calcola la probabilità condizionata di essere positivo avendo
-avuto il risultato del test positivo. 
+positivo di essere effettivamente positivo. 
+
+Il risultato non è affatto banale e fortemente controintuitivo. 
+Questa dashboard calcola le probabilità condizionate di essere positivo avendo avuto ricevuto 
+un test con esito positivo e la probabilità di essere negativo avendo ricevuto un test con esito negativo. 
 
 
 """
