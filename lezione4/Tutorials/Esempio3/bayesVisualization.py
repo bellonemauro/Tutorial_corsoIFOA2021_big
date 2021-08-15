@@ -137,8 +137,9 @@ st.sidebar.write('Falsi negativi:', int(falsi_negativi))
 
 st.markdown(
 """
+<br>
 # Guida
-\n
+<br>
 Questa applicazione serve a visualizzare facilmente gli effetti di un test diagnostico 
 su una popolazione usando la legge di Bayes. 
 
@@ -169,7 +170,11 @@ positivo di essere effettivamente positivo.
 Il risultato non è affatto banale e fortemente controintuitivo. 
 Questa dashboard calcola le probabilità condizionate di essere positivo avendo avuto ricevuto 
 un test con esito positivo e la probabilità di essere negativo avendo ricevuto un test con esito negativo. 
+<br>
 
+---------------------------------------------------------------------
+<sup> Software released under GNU GPL License. <br>
+Author: Mauro Bellone, <a href="http://www.maurobellone.com">www.maurobellone.com</a> <br> </sup>
 
 """
 )
