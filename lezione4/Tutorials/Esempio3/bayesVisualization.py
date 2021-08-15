@@ -141,7 +141,7 @@ st.markdown(
 # Guida
 
 Questa applicazione serve a visualizzare facilmente gli effetti di un test diagnostico 
-su una popolazione usando la legge di Bayes. 
+su una popolazione usando la <a href="https://en.wikipedia.org/wiki/Bayes%27_theorem">legge di Bayes</a> https://en.wikipedia.org/wiki/Bayes%27_theorem. 
 
 Dati due eventi indipendenti $A$ e $B$ la legge di Bayes ci dice che la probabilità condizionata 
 della verificazione dell'evento $A$, dato che l'evento $B$ si è verificato, è calcolabile come: 
@@ -152,6 +152,9 @@ Dove:
 - $P(A)$ è la probabilità di verificazione dell'evento $A$
 - $P(B)$ è la probabilità di verificazione dell'evento $B$
 - $P(B|A)$ è la probabilità di verificazione dell'evento $B$ dato l'evento $A$ verificato
+
+Un esempio analogo è disponibile su wikipedia https://en.wikipedia.org/wiki/Bayes%27_theorem#Drug_testing
+per la determinazione della probabilità di essere positivi in un drug test data la positività del test.
 
 Supponiamo quindi di avere una popolazione di N soggetti i quali devono eseguire un test 
 di positività ad una patologia (es. Maurite). La maurite ha una incidenza sulla popolazione 
