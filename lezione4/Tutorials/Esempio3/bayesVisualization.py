@@ -137,7 +137,7 @@ st.markdown(
 Questa applicazione visualizza facilmente gli effetti di un test diagnostico 
 su una popolazione usando la [legge di Bayes](https://en.wikipedia.org/wiki/Bayes%27_theorem). 
 
-Dati due eventi indipendenti $A$ e $B$ la legge di Bayes ci dice che la probabilità condizionata 
+Dati due eventi $A$ e $B$ la legge di Bayes ci dice che la probabilità condizionata 
 di verificazione dell'evento $A$, dato che l'evento $B$ si è verificato, è calcolabile come: 
 
 $P(A|B) = P(B|A) * P(A) / P(B)$
