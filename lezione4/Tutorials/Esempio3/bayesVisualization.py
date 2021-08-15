@@ -141,7 +141,7 @@ st.markdown(
 # Guida
 
 Questa applicazione serve a visualizzare facilmente gli effetti di un test diagnostico 
-su una popolazione usando la [link]https://en.wikipedia.org/wiki/Bayes%27_theorem. 
+su una popolazione usando la [link](https://en.wikipedia.org/wiki/Bayes%27_theorem). 
 
 Dati due eventi indipendenti $A$ e $B$ la legge di Bayes ci dice che la probabilità condizionata 
 della verificazione dell'evento $A$, dato che l'evento $B$ si è verificato, è calcolabile come: 
@@ -153,7 +153,7 @@ Dove:
 - $P(B)$ è la probabilità di verificazione dell'evento $B$
 - $P(B|A)$ è la probabilità di verificazione dell'evento $B$ dato l'evento $A$ verificato
 
-Un esempio analogo è disponibile su wikipedia https://en.wikipedia.org/wiki/Bayes%27_theorem#Drug_testing
+Un esempio analogo è disponibile su wikipedia [link](https://en.wikipedia.org/wiki/Bayes%27_theorem#Drug_testing)
 per la determinazione della probabilità di essere positivi in un drug test data la positività del test.
 
 Supponiamo quindi di avere una popolazione di N soggetti i quali devono eseguire un test 
@@ -174,11 +174,6 @@ Il risultato non è affatto banale e fortemente controintuitivo.
 Questa dashboard calcola le probabilità condizionate di essere positivo avendo avuto ricevuto 
 un test con esito positivo e la probabilità di essere negativo avendo ricevuto un test con esito negativo. 
 
-
----------------------------------------------------------------------
-Software rilasciato su licenza BDS.
-
-Autore: Mauro Bellone, http://www.maurobellone.com
 
 """
 )
