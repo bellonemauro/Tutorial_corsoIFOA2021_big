@@ -149,10 +149,11 @@ if __name__ == "__main__":
     Questa dashboard calcola le probabilità condizionate di essere positivo avendo avuto ricevuto 
     un test con esito positivo, e la probabilità di essere negativo avendo ricevuto un test con esito negativo. 
 
+    ## Risultato
 
     """
     )
-    
+
     # Slider sidebar
     st.sidebar.write('Regola i parametri di accuratezza del test diagnostico')
 
