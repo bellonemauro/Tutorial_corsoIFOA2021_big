@@ -107,41 +107,6 @@ if __name__ == "__main__":
     # Titolo
     st.title('Dashboard dinamica per la visualizzazione della probabilità condizionata su un test statistico')
 
-    # Slider sidebar
-    st.sidebar.write('Regola i parametri di accuratezza del test diagnostico')
-
-    sensibilita = st.sidebar.slider("Valore di sensibilità in %", 1, 100, 90)
-    specificita = st.sidebar.slider("Valore di specificità in %", 1, 100, 95)
-    incidenza = st.sidebar.slider("Valore di incidenza in %", 0, 100, 10)
-    dimensione_popolazione = st.sidebar.slider("Dimensione della popolazione ", 0, 1000000, 500000)
-
-
-    # calcoli con parametri della sidebar
-    numero_di_positivi = incidenza*dimensione_popolazione/100
-    numero_di_negativi = (100-incidenza)*dimensione_popolazione/100
-    veri_positivi = sensibilita*numero_di_positivi/100
-    veri_negativi = specificita*numero_di_negativi/100
-    falsi_positivi = numero_di_negativi - veri_negativi
-    falsi_negativi = numero_di_positivi - veri_positivi 
-
-    probabilita_pos_dato_positivo = veri_positivi/(veri_positivi+falsi_positivi)
-    st.write('Probabilità di essere positivo avendo ricevuto un test con esito positivo:', np.round(100*probabilita_pos_dato_positivo,2), "%")
-
-    probabilita_neg_dato_negativo = veri_negativi/(veri_negativi+falsi_negativi)
-    st.write('Probabilità di essere negativo avendo ricevuto un test con esito negativo:', np.round(100*probabilita_neg_dato_negativo,2), "%")
-
-    fig = plot_lines (sensibilita, specificita, incidenza)
-    st.plotly_chart(fig)
-
-    # Descrizione della distribuzione nella popolazione rispetto ai dati inseriti 
-    st.sidebar.write('Tot positivi nella popolazione:', int(numero_di_positivi))
-    st.sidebar.write('Tot negativi nella popolazione:', int(numero_di_negativi))
-    st.sidebar.write('Veri positivi:', int(veri_positivi))
-    st.sidebar.write('Veri negativi:', int(veri_negativi))
-    st.sidebar.write('Falsi positivi:', int(falsi_positivi))
-    st.sidebar.write('Falsi negativi:', int(falsi_negativi))
-
-
     st.markdown(
     """
 
@@ -187,6 +152,42 @@ if __name__ == "__main__":
 
     """
     )
+    
+    # Slider sidebar
+    st.sidebar.write('Regola i parametri di accuratezza del test diagnostico')
+
+    sensibilita = st.sidebar.slider("Valore di sensibilità in %", 1, 100, 90)
+    specificita = st.sidebar.slider("Valore di specificità in %", 1, 100, 95)
+    incidenza = st.sidebar.slider("Valore di incidenza in %", 0, 100, 10)
+    dimensione_popolazione = st.sidebar.slider("Dimensione della popolazione ", 0, 1000000, 500000)
+
+
+    # calcoli con parametri della sidebar
+    numero_di_positivi = incidenza*dimensione_popolazione/100
+    numero_di_negativi = (100-incidenza)*dimensione_popolazione/100
+    veri_positivi = sensibilita*numero_di_positivi/100
+    veri_negativi = specificita*numero_di_negativi/100
+    falsi_positivi = numero_di_negativi - veri_negativi
+    falsi_negativi = numero_di_positivi - veri_positivi 
+
+    probabilita_pos_dato_positivo = veri_positivi/(veri_positivi+falsi_positivi)
+    st.write('Probabilità di essere positivo avendo ricevuto un test con esito positivo:', np.round(100*probabilita_pos_dato_positivo,2), "%")
+
+    probabilita_neg_dato_negativo = veri_negativi/(veri_negativi+falsi_negativi)
+    st.write('Probabilità di essere negativo avendo ricevuto un test con esito negativo:', np.round(100*probabilita_neg_dato_negativo,2), "%")
+
+    fig = plot_lines (sensibilita, specificita, incidenza)
+    st.plotly_chart(fig)
+
+    # Descrizione della distribuzione nella popolazione rispetto ai dati inseriti 
+    st.sidebar.write('Tot positivi nella popolazione:', int(numero_di_positivi))
+    st.sidebar.write('Tot negativi nella popolazione:', int(numero_di_negativi))
+    st.sidebar.write('Veri positivi:', int(veri_positivi))
+    st.sidebar.write('Veri negativi:', int(veri_negativi))
+    st.sidebar.write('Falsi positivi:', int(falsi_positivi))
+    st.sidebar.write('Falsi negativi:', int(falsi_negativi))
+
+
 
     st.subheader("""
     ---------------------------------------------------------------------
