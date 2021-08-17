@@ -149,7 +149,7 @@ if __name__ == "__main__":
     Questa dashboard calcola le probabilità condizionate di essere positivo avendo avuto ricevuto 
     un test con esito positivo, e la probabilità di essere negativo avendo ricevuto un test con esito negativo. 
 
-    ## Risultato
+    ## Risultato analitico
 
     Siano $+$ e $–$ gli eventi risultati dall'esito del test diagnostico che può essere positivo o negativo, 
     quindi $D$ e $𝐷^𝐶$ sono gli eventi the risultano dal soggetto di aver contratto o no la maurite. 
@@ -165,7 +165,8 @@ if __name__ == "__main__":
     cioè la probabilità di aver avuto un test negativo e di non contratto la malattia. 
 
     $𝑃(𝐷|+) = 𝑃(+|𝐷) 𝑃(+) / 𝑃(𝐷) = 𝑃(+|𝐷)𝑃(+) / (𝑃(+|𝐷)𝑃(+)+𝑃(𝐷│−)𝑃(−))$
-
+    
+    ## Risultato numerico
 
     """
     )
