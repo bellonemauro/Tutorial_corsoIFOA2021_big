@@ -22,18 +22,18 @@ import plotly.graph_objects as go
 import numpy as np
 
 
-def plot_lines (sensibilita: int, specificita: int, incidenza: int) -> go.Figure:
+def plot_lines (sensibilita: int, specificita: int, prevalenza: int) -> go.Figure:
     """
     Funzione di plotting 
     
-    I valori di sensibilità, specificità e incidenza sono considerati in percentuale
+    I valori di sensibilità, specificità e prevalenza sono considerati in percentuale
     """
     MIN_VALUE = 0
     MAX_VALUE = 100 
 
     #calcolo i parametri per la visualizzazione
-    numero_di_positivi = incidenza 
-    numero_di_negativi = MAX_VALUE-incidenza  
+    numero_di_positivi = prevalenza 
+    numero_di_negativi = MAX_VALUE-prevalenza  
     
     # questo calcolo va bene solo in questo caso in quanto il grafico è su percentuale e non su popolazione
     veri_positivi = sensibilita
@@ -50,13 +50,13 @@ def plot_lines (sensibilita: int, specificita: int, incidenza: int) -> go.Figure
             fill="toself", fillcolor="orange", opacity=0.2)
         )
         
-    # incidenza positivi nella popolazione
+    # prevalenza positivi nella popolazione
     fig.add_trace(
         go.Scatter(
-              x=[incidenza,incidenza],
+              x=[prevalenza,prevalenza],
               y=[MIN_VALUE,MAX_VALUE],
               mode='lines',
-              name='incidenza positivi',
+              name='prevalenza positivi',
               line=go.scatter.Line(color="red") )
       )
         
@@ -83,7 +83,7 @@ def plot_lines (sensibilita: int, specificita: int, incidenza: int) -> go.Figure
     
     fig.add_trace(
         go.Scatter(
-            x=[incidenza,incidenza,MAX_VALUE,MAX_VALUE], 
+            x=[prevalenza,prevalenza,MAX_VALUE,MAX_VALUE], 
             y=[MIN_VALUE,falsi_positivi,falsi_positivi,MIN_VALUE], 
             name='Falsi positivi',
             fill="toself", fillcolor="green", opacity=0.2)
@@ -132,8 +132,8 @@ if __name__ == "__main__":
 
     ## Problema
     Supponiamo di eseguire un test diagnostico su una popolazione di N soggetti per la ricerca di 
-    una patologia (es. Maurite). La maurite ha una incidenza sulla popolazione 
-    regolabile usando l'indicatore -incidenza- che rappresenta la percentuale di popolazione che 
+    una patologia (es. Maurite). La maurite ha una prevalenza nella popolazione 
+    regolabile usando l'indicatore -prevalenza- che rappresenta la percentuale di popolazione che 
     effettivamente ha la maurite (valore di default 10%). 
 
     Gli scienziati hanno sviluppato un test diagnostico che riesce a rilevare la maurite. 
@@ -151,6 +151,21 @@ if __name__ == "__main__":
 
     ## Risultato
 
+    Siano $+$ e $–$ gli eventi risultati dall'esito del test diagnostico che può essere positivo o negativo, 
+    quindi $D$ e $𝐷^𝐶$ sono gli eventi the risultano dal soggetto di aver contratto o no la maurite. 
+    La sensibilità è la probabilità che il test diagnostico sia positivo dato che il soggetto è effettivamente positivo $𝑃(+|𝐷)$. 
+
+    La specificità è la probabilità che il test sia negativo dato che il soggetto non ha effettivamente la maurite $𝑃(−|𝐷^𝐶)$.
+
+    Se un soggetto ha ricevuto un test con esito positivo è interessato alla probabilità che $𝑃(𝐷|+)$, 
+    cioè la probabilità di avere un test positivo e di aver effettivamente contratto la malattia. 
+
+    Se hai avuto un test negativo sei interessato alla probabilità che $𝑃(𝐷^𝐶 |−)$, 
+    cioè la probabilità di aver avuto un test negativo e di non contratto la malattia. 
+
+    $𝑃(𝐷|+) = 𝑃(+|𝐷) 𝑃(+) / 𝑃(𝐷) = 𝑃(+|𝐷)𝑃(+) / (𝑃(+|𝐷)𝑃(+)+𝑃(𝐷│−)𝑃(−))
+
+
     """
     )
 
@@ -159,13 +174,13 @@ if __name__ == "__main__":
 
     sensibilita = st.sidebar.slider("Valore di sensibilità in %", 1, 100, 90)
     specificita = st.sidebar.slider("Valore di specificità in %", 1, 100, 95)
-    incidenza = st.sidebar.slider("Valore di incidenza in %", 0, 100, 10)
+    prevalenza = st.sidebar.slider("Valore di prevalenza in %", 0, 100, 10)
     dimensione_popolazione = st.sidebar.slider("Dimensione della popolazione ", 0, 1000000, 500000)
 
 
     # calcoli con parametri della sidebar
-    numero_di_positivi = incidenza*dimensione_popolazione/100
-    numero_di_negativi = (100-incidenza)*dimensione_popolazione/100
+    numero_di_positivi = prevalenza*dimensione_popolazione/100
+    numero_di_negativi = (100-prevalenza)*dimensione_popolazione/100
     veri_positivi = sensibilita*numero_di_positivi/100
     veri_negativi = specificita*numero_di_negativi/100
     falsi_positivi = numero_di_negativi - veri_negativi
@@ -177,7 +192,7 @@ if __name__ == "__main__":
     probabilita_neg_dato_negativo = veri_negativi/(veri_negativi+falsi_negativi)
     st.write('Probabilità di essere negativo avendo ricevuto un test con esito negativo:', np.round(100*probabilita_neg_dato_negativo,2), "%")
 
-    fig = plot_lines (sensibilita, specificita, incidenza)
+    fig = plot_lines (sensibilita, specificita, prevalenza)
     st.plotly_chart(fig)
 
     # Descrizione della distribuzione nella popolazione rispetto ai dati inseriti 
