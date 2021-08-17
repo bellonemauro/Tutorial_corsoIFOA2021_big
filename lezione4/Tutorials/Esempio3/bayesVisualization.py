@@ -153,6 +153,7 @@ if __name__ == "__main__":
 
     Siano $+$ e $–$ gli eventi risultati dall'esito del test diagnostico che può essere positivo o negativo, 
     quindi $D$ e $𝐷^𝐶$ sono gli eventi the risultano dal soggetto di aver contratto o no la maurite. 
+    
     La sensibilità è la probabilità che il test diagnostico sia positivo dato che il soggetto è effettivamente positivo $𝑃(+|𝐷)$. 
 
     La specificità è la probabilità che il test sia negativo dato che il soggetto non ha effettivamente la maurite $𝑃(−|𝐷^𝐶)$.
@@ -163,7 +164,7 @@ if __name__ == "__main__":
     Se hai avuto un test negativo sei interessato alla probabilità che $𝑃(𝐷^𝐶 |−)$, 
     cioè la probabilità di aver avuto un test negativo e di non contratto la malattia. 
 
-    $𝑃(𝐷|+) = 𝑃(+|𝐷) 𝑃(+) / 𝑃(𝐷) = 𝑃(+|𝐷)𝑃(+) / (𝑃(+|𝐷)𝑃(+)+𝑃(𝐷│−)𝑃(−))
+    $𝑃(𝐷|+) = 𝑃(+|𝐷) 𝑃(+) / 𝑃(𝐷) = 𝑃(+|𝐷)𝑃(+) / (𝑃(+|𝐷)𝑃(+)+𝑃(𝐷│−)𝑃(−))$
 
 
     """
