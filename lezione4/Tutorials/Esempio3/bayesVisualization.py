@@ -193,10 +193,15 @@ if __name__ == "__main__":
 
     probabilita_neg_dato_negativo = veri_negativi/(veri_negativi+falsi_negativi)
     st.write('Probabilità di essere negativo avendo ricevuto un test con esito negativo:', np.round(100*probabilita_neg_dato_negativo,2), "%")
-
+    
+    st.markdown(
+    """
+    ## Interpretazione grafica
+    """)
+    
     fig = plot_lines (sensibilita, specificita, prevalenza)
     st.plotly_chart(fig)
-
+    
     # Descrizione della distribuzione nella popolazione rispetto ai dati inseriti 
     st.sidebar.write('Tot positivi nella popolazione:', int(numero_di_positivi))
     st.sidebar.write('Tot negativi nella popolazione:', int(numero_di_negativi))
