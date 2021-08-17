@@ -50,19 +50,7 @@ def plot_lines (sensibilita: int, specificita: int, prevalenza: int) -> go.Figur
             fill="toself", fillcolor="orange", opacity=0.2)
         )
         
-    # prevalenza positivi nella popolazione
-    fig.add_trace(
-        go.Scatter(
-              x=[prevalenza,prevalenza],
-              y=[MIN_VALUE,MAX_VALUE],
-              mode='lines',
-              name='prevalenza positivi',
-              line=go.scatter.Line(color="red") )
-      )
-        
     
-
-  
     fig.add_trace(
         go.Scatter(
             x=[MIN_VALUE,MIN_VALUE,numero_di_positivi, numero_di_positivi], 
@@ -88,7 +76,16 @@ def plot_lines (sensibilita: int, specificita: int, prevalenza: int) -> go.Figur
             name='Falsi positivi',
             fill="toself", fillcolor="green", opacity=0.2)
            )
-    
+           
+    # prevalenza positivi nella popolazione
+    fig.add_trace(
+        go.Scatter(
+              x=[prevalenza,prevalenza],
+              y=[MIN_VALUE,MAX_VALUE],
+              mode='lines',
+              name='prevalenza positivi',
+              line=go.scatter.Line(color="red") )
+      )
    
     fig.update_xaxes(showspikes=True)
     fig.update_yaxes(showspikes=True)
@@ -127,7 +124,7 @@ if __name__ == "__main__":
 
     Un esempio analogo è disponibile su wikipedia
     per la determinazione della probabilità di essere positivi in un
-    [drig test](https://en.wikipedia.org/wiki/Bayes%27_theorem#Drug_testing)
+    [drug test](https://en.wikipedia.org/wiki/Bayes%27_theorem#Drug_testing)
     data l'esito positivo del test.
 
     ## Problema
@@ -198,7 +195,7 @@ if __name__ == "__main__":
     """
     ## Interpretazione grafica
     """)
-    
+
     fig = plot_lines (sensibilita, specificita, prevalenza)
     st.plotly_chart(fig)
     
