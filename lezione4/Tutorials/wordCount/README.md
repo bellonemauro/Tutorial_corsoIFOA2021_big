@@ -1,6 +1,10 @@
 # Tutorial word_count commentato in italiano
 
-Per eseguire questo tutorial hadoop deve essere correttamente installato e configurato sul sistema, 
+Per eseguire questo tutorial hadoop deve essere correttamente installato e configurato sul sistema. 
+L'esercizio è da eseguire in due modi:
+
+1. modo base - contare le parole nei due file contenuti nella cartella input (poche parole, verifica facile del risultato)
+2. contare le parole nel dataset smsSpamCollection preso da: https://www.dt.fee.unicamp.br/~tiago/smsspamcollection/
 
 ## Procedura:
 
