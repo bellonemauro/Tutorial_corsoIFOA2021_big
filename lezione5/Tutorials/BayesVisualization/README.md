@@ -57,5 +57,5 @@ $𝑃(𝐷|+) = 𝑃(+|𝐷) 𝑃(+) / 𝑃(𝐷) = 𝑃(+|𝐷)𝑃(+) / (𝑃(
 ## Risultato numerico
 
 Eseguire il codice 
-https://share.streamlit.io/bellonemauro/tutorial_corsoifoa2021_big/main/lezione5/Tutorials/Esempio3/bayesVisualization.py
+https://share.streamlit.io/bellonemauro/tutorial_corsoifoa2021_big/main/lezione5/Tutorials/BayesVisualization/bayesVisualization.py
 
