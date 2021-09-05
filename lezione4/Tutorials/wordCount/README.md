@@ -1,8 +1,8 @@
-#Tutorial word_count commentato in italiano
+# Tutorial word_count commentato in italiano
 
 Per eseguire questo tutorial hadoop deve essere correttamente installato e configurato sul sistema, 
 
-##Procedura:
+## Procedura:
 
 Eseguiamo il file system di Hadoop e il relative resource manager
 
@@ -21,4 +21,5 @@ Esaminiamo l’output
   	cat output/*
 
 oppure 
+
   	hdfs dfs -cat output/*
