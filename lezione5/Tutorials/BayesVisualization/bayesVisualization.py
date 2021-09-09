@@ -1,7 +1,7 @@
 #  +---------------------------------------------------------------------------+
 #  |                                                                           |
 #  |  IFOA2021 - BIG DATA e Analisi dei Dati                                   |
-#  |  Tutorial 3: Visualizzazione legge di Bayes                               |
+#  |  Tutorial : Visualizzazione legge di Bayes                                |
 #  |                                                                           |
 #  |  Autore: Mauro Bellone                                                    |
 #  |  Released under BDS License                                               |
