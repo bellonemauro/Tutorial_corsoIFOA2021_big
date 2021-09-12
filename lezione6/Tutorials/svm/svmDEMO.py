@@ -34,11 +34,11 @@ input("Dati generati, premi invio per continuare \n\n")
 print(annotazioni)
 input("Annotazioni generati, premi invio per continuare \n\n")
 
-# instanziamo il modello del classificatore 
+# istanziamo il modello del classificatore 
 # possiamo cambiare il kernel usando delle altre funzioni come rbf (radial based function)
 classificatore = svm.SVC(kernel='linear', C=1)
 print (classificatore)
-input ("Attributi del classificatore instanziato, premi invio per continuare \n\n")
+input ("Attributi del classificatore istanziato, premi invio per continuare \n\n")
 
 # la funzione fit esegue l'algoritmo di fittaggio dei dati quindi generazione del classificatore ottimo 
 classificatore.fit(dati, annotazioni)
