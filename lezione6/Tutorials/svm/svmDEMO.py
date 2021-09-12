@@ -1,7 +1,7 @@
 #  +---------------------------------------------------------------------------+
 #  |                                                                           |
 #  |  IFOA2021 - BIG DATA e Analisi dei Dati                                   |
-#  |  Tutorial : Support vector machines                                      |
+#  |  Tutorial : Support vector machines                                       |
 #  |                                                                           |
 #  |  Autore: Mauro Bellone                                                    |
 #  |  Released under BDS License                                               |
