@@ -1,7 +1,7 @@
 #  +---------------------------------------------------------------------------+
 #  |                                                                           |
 #  |  IFOA2021 - BIG DATA e Analisi dei Dati                                   |
-#  |  Tutorial 5: Regole associative                                           |
+#  |  Tutorial : Regole associative                                           |
 #  |                                                                           |
 #  |  Autore: Mauro Bellone                                                    |
 #  |  Released under BDS License                                               |
@@ -24,6 +24,8 @@ from mlxtend.frequent_patterns import association_rules
 import time
 
 
+
+
 # Creo il mio dataset fatto semplicemente come elenco di transazioni e oggetti acquistati
 # in questo dataset ogni vettore indica la lista della spesa per un cliente nel seguente formato: 
 #
@@ -43,22 +45,28 @@ te_ary = te.fit(dataset).transform(dataset)
 data_frame = pd.DataFrame(te_ary, columns=te.columns_)
 
 # eseguiamo l'algoritmo di ricerca delle associazioni apriori
-frequent_itemsets = apriori(data_frame, min_support=0.6, use_colnames=True)
+inizio = time.time()
+oggetti_frequenti = apriori(data_frame, min_support=0.6, use_colnames=True)
+fine = time.time()
+print("Tempo di generazione delle degli insiemi di oggetti frequenti con apriori pari a ", fine - inizio, " sec")
 
-### A scopo didattico possiamo sostituire la linea precedente con una delle seguenti e testare altri metodi:
-#frequent_itemsets1 = fpgrowth(data_frame, min_support=0.6, use_colnames=True)
-#frequent_itemsets3 = fpmax(data_frame, min_support=0.6, use_colnames=True)
+### A scopo didattico possiamo sostituire la linea precedente con una delle seguenti e testare fpgrowth:
+inizio = time.time()
+oggetti_frequenti_fpg = fpgrowth(data_frame, min_support=0.6, use_colnames=True)
 
+fine = time.time()
+print("Tempo di generazione delle degli insiemi di oggetti frequenti con fpgrowth pari a ", fine - inizio, " sec")
+input (" premi un tasto ")
 # stampiamo le frequenze
-print(frequent_itemsets)
+print(oggetti_frequenti)
 
 # generiamo le regole di associazione usando diverse metriche 
-regole_confidenza = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.8)
+regole_confidenza = association_rules(oggetti_frequenti, metric="confidence", min_threshold=0.8)
 print(regole_confidenza)
 input("Associazioni usando la confidenza come metrica generate - premi un tasto per continuare\n\n")
 
 
-regole_lift = association_rules(frequent_itemsets, metric="lift", min_threshold=1.2)
+regole_lift = association_rules(oggetti_frequenti, metric="lift", min_threshold=1.2)
 print(regole_lift)
 input("Associazioni usando la metrica lift generate - premi un tasto per continuare\n\n")
 
