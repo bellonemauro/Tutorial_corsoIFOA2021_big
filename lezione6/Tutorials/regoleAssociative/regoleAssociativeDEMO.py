@@ -39,6 +39,11 @@ dataset = [['Latte', 'Cipolla', 'Arachidi', 'Cereali', 'Uova', 'Yogurt'],
            ['Latte', 'Cavallo', 'Pane', 'Cereali', 'Yogurt'],
            ['Pane', 'Cipolla', 'Cipolla', 'Cereali', 'Gelato', 'Uova']]
 
+minimo_supporto = 0.6
+minima_confidenza = 0.8
+minimo_lift = 1.2
+minimo_numero_di_antecedenti = 0
+
 # instanziamo l'oggetto di codifica delle transazioni
 te = TransactionEncoder()
 te_ary = te.fit(dataset).transform(dataset)
@@ -46,13 +51,13 @@ data_frame = pd.DataFrame(te_ary, columns=te.columns_)
 
 # eseguiamo l'algoritmo di ricerca delle associazioni apriori
 inizio = time.time()
-oggetti_frequenti = apriori(data_frame, min_support=0.6, use_colnames=True)
+oggetti_frequenti_ap = apriori(data_frame, min_support=minimo_supporto, use_colnames=True)
 fine = time.time()
 print("Tempo di generazione delle degli insiemi di oggetti frequenti con apriori pari a ", fine - inizio, " sec")
 
 ### A scopo didattico possiamo sostituire la linea precedente con una delle seguenti e testare fpgrowth:
 inizio = time.time()
-oggetti_frequenti_fpg = fpgrowth(data_frame, min_support=0.6, use_colnames=True)
+oggetti_frequenti = fpgrowth(data_frame, min_support=minimo_supporto, use_colnames=True)
 
 fine = time.time()
 print("Tempo di generazione delle degli insiemi di oggetti frequenti con fpgrowth pari a ", fine - inizio, " sec")
@@ -61,12 +66,12 @@ input (" premi un tasto ")
 print(oggetti_frequenti)
 
 # generiamo le regole di associazione usando diverse metriche 
-regole_confidenza = association_rules(oggetti_frequenti, metric="confidence", min_threshold=0.8)
+regole_confidenza = association_rules(oggetti_frequenti, metric="confidence", min_threshold=minima_confidenza)
 print(regole_confidenza)
 input("Associazioni usando la confidenza come metrica generate - premi un tasto per continuare\n\n")
 
 
-regole_lift = association_rules(oggetti_frequenti, metric="lift", min_threshold=1.2)
+regole_lift = association_rules(oggetti_frequenti, metric="lift", min_threshold=minimo_lift)
 print(regole_lift)
 input("Associazioni usando la metrica lift generate - premi un tasto per continuare\n\n")
 
@@ -82,15 +87,15 @@ print(regole_lift)
 input("Lunghezza delle antecedenze aggiunta - premi un tasto per continuare\n\n")
 
 # filtriamo le regole generate secondo parametri diversi per ottenere le righe di interesse
-regole_migliori_conf = regole_confidenza[ (regole_confidenza['antecedent_len'] >= 2) &
-       (regole_confidenza['confidence'] >= 1.0) &
-       (regole_confidenza['lift'] > 1.2) ]
+regole_migliori_conf = regole_confidenza[ (regole_confidenza['antecedent_len'] >= minimo_numero_di_antecedenti) &
+       (regole_confidenza['confidence'] >= minima_confidenza) &
+       (regole_confidenza['lift'] > minimo_lift) ]
 print(regole_migliori_conf)
 input("Limite sulle antecedenze, confidenza e lift - premi un tasto per continuare\n\n")
 
-regole_migliori_lift = regole_lift[ (regole_lift['antecedent_len'] >= 2) &
-       (regole_lift['confidence'] >= 1.0) &
-       (regole_lift['lift'] > 1.2) ]
+regole_migliori_lift = regole_lift[ (regole_lift['antecedent_len'] >= minimo_numero_di_antecedenti) &
+       (regole_lift['confidence'] >= minima_confidenza) &
+       (regole_lift['lift'] > minimo_lift) ]
 print(regole_migliori_lift)
 input("Limite sulle antecedenze, confidenza e lift - premi un tasto per continuare\n\n")
 
