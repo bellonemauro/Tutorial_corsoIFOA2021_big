@@ -1,7 +1,7 @@
 #  +---------------------------------------------------------------------------+
 #  |                                                                           |
 #  |  IFOA2021 - BIG DATA e Analisi dei Dati                                   |
-#  |  Tutorial : Regole associative                                           |
+#  |  Tutorial : Regole associative                                            |
 #  |                                                                           |
 #  |  Autore: Mauro Bellone                                                    |
 #  |  Released under BDS License                                               |
@@ -11,9 +11,8 @@
 """
 Questo tutorial è pensato per mostrare il funzionamento delle regole associative 
 e dei principali parametri coinvolti nel loro studio. 
-
 """
-
+print(__doc__)
 
 
 # importo librerie utili 
@@ -39,10 +38,11 @@ dataset = [['Latte', 'Cipolla', 'Arachidi', 'Cereali', 'Uova', 'Yogurt'],
            ['Latte', 'Cavallo', 'Pane', 'Cereali', 'Yogurt'],
            ['Pane', 'Cipolla', 'Cipolla', 'Cereali', 'Gelato', 'Uova']]
 
+# parametri di scelta delle relazioni
 minimo_supporto = 0.6
 minima_confidenza = 0.8
 minimo_lift = 1.2
-minimo_numero_di_antecedenti = 0
+minimo_numero_di_antecedenti = 2
 
 # instanziamo l'oggetto di codifica delle transazioni
 te = TransactionEncoder()
@@ -51,13 +51,13 @@ data_frame = pd.DataFrame(te_ary, columns=te.columns_)
 
 # eseguiamo l'algoritmo di ricerca delle associazioni apriori
 inizio = time.time()
-oggetti_frequenti_ap = apriori(data_frame, min_support=minimo_supporto, use_colnames=True)
+oggetti_frequenti = apriori(data_frame, min_support=minimo_supporto, use_colnames=True)
 fine = time.time()
 print("Tempo di generazione delle degli insiemi di oggetti frequenti con apriori pari a ", fine - inizio, " sec")
 
 ### A scopo didattico possiamo sostituire la linea precedente con una delle seguenti e testare fpgrowth:
 inizio = time.time()
-oggetti_frequenti = fpgrowth(data_frame, min_support=minimo_supporto, use_colnames=True)
+oggetti_frequenti_fp = fpgrowth(data_frame, min_support=minimo_supporto, use_colnames=True)
 
 fine = time.time()
 print("Tempo di generazione delle degli insiemi di oggetti frequenti con fpgrowth pari a ", fine - inizio, " sec")
