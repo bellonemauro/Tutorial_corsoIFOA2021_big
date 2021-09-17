@@ -5,4 +5,4 @@ Questo tutorial è pensato semplicemente dimostrare come generare delle regole a
 
 
 
-<img src="https://github.com/bellonemauro/Tutorial_corsoIFOA2021_big/blob/main/lezione6/Tutorials/regoleAssociative/lecture6.png"  width="800" height="600" />
+<img src="https://github.com/bellonemauro/Tutorial_corsoIFOA2021_big/blob/main/lezione6/Tutorials/regoleAssociative/Lecture6.png"  width="800" height="600" />
