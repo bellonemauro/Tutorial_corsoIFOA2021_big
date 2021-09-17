@@ -14,4 +14,4 @@ Eseguiamo il file python tramite anaconda:
 
 Esaminiamo l’output
 
-<img src="https://github.com/bellonemauro/Tutorial_corsoIFOA2021_big/blob/main/lezione6/Tutorials/svm/screen_result.png"  width="1356" height="1014" />
+<img src="https://github.com/bellonemauro/Tutorial_corsoIFOA2021_big/blob/main/lezione6/Tutorials/svm/screen_result.png"  width="680" height="500" />
