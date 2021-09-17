@@ -22,4 +22,4 @@ Eseguiamo il file python tramite anaconda:
 
 Esaminiamo l’output
 
-<img src="https://github.com/bellonemauro/Tutorial_corsoIFOA2021_big/blob/main/lezione6/Tutorials/regoleAssociative/screen_result.png"  width="600" height="800" />
+<img src="https://github.com/bellonemauro/Tutorial_corsoIFOA2021_big/blob/main/lezione6/Tutorials/regoleAssociative/screen_result.png"  width="1000" height="1300" />
