@@ -48,6 +48,21 @@ print('Quota della retta di regressione:', np.round(modello.intercept_,2) , '\n\
 y_pred = modello.predict(anno)
 print('Risposta predetta:', np.round(y_pred,1), sep='\n')
 
+
+# build the state matrix
+hessiano = np.zeros((len(anno),2))  
+for i in range (1,len(anno)):
+    hessiano[i,0] = anno[i]
+    hessiano[i,1] = 1.0
+
+# costruisce la stima dei parametri usando la matrice hessiana
+parametri_MLS =  np.matmul(np.matmul(np.linalg.inv(np.matmul(hessiano.T, hessiano)),hessiano.T),fatturato_mEuro)
+print(parametri_MLS)
+input ("press enter")
+#t = [0,x(size(x,1)-1)];
+test_MLS = parametri_MLS[0]*anno + parametri_MLS[1]
+print('Risposta predetta MLS:', np.round(test_MLS,1), sep='\n')
+
 x_next = np.array([2021, 2022, 2023]).reshape((-1, 1))
 y_next = modello.predict(x_next)
 print("\nFatturato 2021-23 ", np.round(y_next,1))
@@ -55,6 +70,7 @@ print("\nFatturato 2021-23 ", np.round(y_next,1))
 # plot con il modello e i dati che sono stati usati per generarlo
 plt.plot(anno, y_pred, c='r', label='Modello')
 plt.scatter(anno, fatturato_mEuro, c='g', label='Data')
+plt.scatter(anno, test_MLS, c='b', label='Data MLS')
 plt.grid()
 plt.legend(loc='best')
 plt.xlabel('Anno')

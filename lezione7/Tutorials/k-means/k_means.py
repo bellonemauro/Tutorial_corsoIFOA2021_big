@@ -39,18 +39,19 @@ modello = KMeans(n_clusters=2)
 # Fittiamo il modello
 modello.fit(dati)
 
-# assign a cluster to each example
+# proviamo a predire assegnando una classe per ogni dato
 previsione = modello.predict(dati)
 
-# retrieve unique clusters
+# questi saranno i cluster unici (quindi le classi)
 clusters = unique(previsione)
 
-# create scatter plot for samples from each cluster
+# crea uno scatter plot per ogni esempio nel cluster
 for cluster in clusters:
-	# get row indexes for samples with this cluster
-	row_ix = where(previsione == cluster)
-	# create scatter of these samples
-	pyplot.scatter(dati[row_ix, 0], dati[row_ix, 1])
+	# prendiamo l'indice della riga per gli esempi in questo cluster 
+	indice_riga = where(previsione == cluster)
+
+	# plottiamo
+	pyplot.scatter(dati[indice_riga, 0], dati[indice_riga, 1])
 
 # show the plot
 pyplot.show()
