@@ -14,8 +14,11 @@ basato su support vector machine SVM
 
 """
 
+# importiamo le solite librerie matematica e di plotting 
 import numpy as np
 import matplotlib.pyplot as plt
+
+# importiamo sklearn
 from sklearn import svm 
 from sklearn.datasets.samples_generator import make_blobs 
 
@@ -24,7 +27,7 @@ from sklearn.datasets.samples_generator import make_blobs
 # aventi 2 features (quindi 2 dimensioni)
 # e 2 possibili annotazioni (quindi 2 centroidi) centers = 2
 # random_state ci serve a cambiare i campioni generati come un seed, proviamo valori 50 e 40 
-dati, annotazioni = make_blobs(n_samples = 40, n_features=2, centers=2, random_state=50)  
+dati, annotazioni = make_blobs(n_samples = 40, n_features=2, centers=2, random_state=40)  
 
 # stampiamo i dati generati 40x2
 print(dati)
@@ -69,7 +72,7 @@ ax.scatter(classificatore.support_vectors_[:,0], classificatore.support_vectors_
 #plt.show()
 
 # testiamo il classificatore su un nuovo dato precedentemente non visto
-dati_test, annotazioni_vere = make_blobs(n_samples = 10, n_features=2, centers=2, random_state=50)
+dati_test, annotazioni_vere = make_blobs(n_samples = 10, n_features=2, centers=2, random_state=40)
 #dati_test, annotazioni_vere = make_blobs(n_samples = 1000, n_features=2, centers=1, random_state=49)
 annotazioni_generate = classificatore.predict(dati_test)
 plt.scatter(dati_test[:,0], dati_test[:,1], c=annotazioni_generate, s=30, cmap=plt.cm.Accent)

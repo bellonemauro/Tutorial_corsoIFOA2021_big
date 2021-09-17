@@ -47,7 +47,7 @@ print('Quota della retta di regressione:', np.round(modello.intercept_,2) , '\n\
 
 y_pred = modello.predict(anno)
 print('Risposta predetta:', np.round(y_pred,1), sep='\n')
-
+input ("premi invio")
 
 # build the state matrix
 hessiano = np.zeros((len(anno),2))  

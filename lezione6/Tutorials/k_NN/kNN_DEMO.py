@@ -44,15 +44,16 @@ mesh_color_map = ListedColormap(['orange', 'cyan', 'red','cornflowerblue'])
 # possiamo eseguire l'esercizio 2 volte, prima usando l'opzione "uniform" sui pesi e dopo usando "distance"
 weights = 'uniform'#'distance'
 # Istanziamo il classificatore NN e fittiamo i dati
-clf = neighbors.KNeighborsClassifier(n_neighbors, weights=weights)
-clf.fit(dati, annotazioni)
+classificatore = neighbors.KNeighborsClassifier(n_neighbors, weights=weights)
+classificatore.fit(dati, annotazioni)
 
 # plottiamo i confini decisionali con colori diversi per ogni punto della mesh
 x_min, x_max = dati[:, 0].min() - 1, dati[:, 0].max() + 1
 y_min, y_max = dati[:, 1].min() - 1, dati[:, 1].max() + 1
 xx, yy = np.meshgrid(np.arange(x_min, x_max, passo_mesh),
                         np.arange(y_min, y_max, passo_mesh))
-Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
+                        
+Z = classificatore.predict(np.c_[xx.ravel(), yy.ravel()])
 
 # Coloriamo i risultati
 Z = Z.reshape(xx.shape)
