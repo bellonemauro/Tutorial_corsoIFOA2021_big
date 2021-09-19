@@ -81,7 +81,7 @@ if __name__ == "__main__":
     plt.legend(loc="best")
     plt.title("Valutazione training e test")
     plt.xlabel("X1")
-    plt.ylabel("Y2")
+    plt.ylabel("X2")
     plt.show()
 
     plt.plot(loss, c="blue", alpha=0.6)
