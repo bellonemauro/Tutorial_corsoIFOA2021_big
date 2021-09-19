@@ -14,11 +14,9 @@ class percettroneSemplice():
     """
     Implementazione classe percetrone semplice basato su numpy
 
-        
 
     Esempio d'uso 
     --------
-    >>> from sklearn.datasets import make_blobs
     >>> percettrone_semplice = percettroneSemplice(_num_input=num_input, _num_iterazioni = 10000, _learning_rate =0.001) 
     >>> percettrone_semplice.ottimizza(dati_train, annotazioni_train)
     >>> annotazioni_pred = percettrone_semplice.predict(dati)
