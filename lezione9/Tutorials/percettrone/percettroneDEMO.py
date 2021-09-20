@@ -33,6 +33,7 @@ if __name__ == "__main__":
     dati, annotazioni = datasets.make_blobs(n_samples = 200, n_features=2, centers=2, random_state=50)  
     #np.random.seed(0) # imposto il random seed per essere sicuro di stare sempre nella stessa condizione
     #dati, annotazioni = datasets.make_blobs(n_samples = 100, centers = 2, cluster_std=1.5)
+    
     # Divido il dataset in train e test 
     dati_train, dati_test, annotazioni_train, annotazioni_test = train_test_split(dati, annotazioni, test_size =0.3, random_state=1)
 
@@ -44,9 +45,6 @@ if __name__ == "__main__":
 
     plt.scatter(dati_train[0,:],dati_train[1,:], c="blue", alpha=0.6, label="train")# c=annotazioni_train )
     plt.scatter(dati_test[0,:],dati_test[1,:], c="red", alpha=0.6, label="test")# c=annotazioni_train )
-    #plt.scatter(dati_test[:,0], dati_test[:,1], c=annotazioni_test, s=0.003)
-    #plt.scatter(dati_train[:,0], dati_train[:,1], c=annotazioni, s=0.003)
-    #plt.scatter(dati_test[:,0], dati_test[:,1], c=dict["Y_pred_test"], s=0.003)
     plt.title(" Dati generati per training e test ")
     plt.legend(loc="best")
     plt.xlabel("X1")

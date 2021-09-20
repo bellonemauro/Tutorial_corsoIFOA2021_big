@@ -119,19 +119,17 @@ class percettroneSemplice():
     def ottimizza(self, _input, _annotazioni):
         """
         Ottimizzatore del percettrone basato sul gradient descent. 
-        Questa funzione non ritorna nulla, i pesi sono aggiornati nelle variabili membro della classe percettrone
-        i valori sono accessibili tramite self.pesi, self.bias
+        Questa funzione non ritorna nulla, i pesi sono aggiornati nelle variabili membro 
+        della classe percettrone i cui valori sono accessibili tramite self.pesi, self.bias
 
         Parametri: 
         ----------
         _input (array[float]): dati sui quali effettuare il training
         _annotazioni (array[float]): annotazioni relative ai dati in input
-        
         """
         self.costi = [] # deve essere azzerata ogni volta che inizio l'ottimizzatore
         for i in range(self.num_iterazioni):
             
-
             self.propaga(_input, _annotazioni)
             d_pesi = self.grad_dict["d_p"]
             d_bias = self.grad_dict["d_b"]
@@ -172,7 +170,7 @@ class percettroneSemplice():
         attivazione = self.sigmoide(np.dot(self.pesi.T, _input)+ self.bias)
         
         for i in range(m):
-            output_pred[0,i] = 1 if attivazione[0,i] > 0.5 else 0
+            output_pred[0,i] = 1 if attivazione[0,i] > 0.5 else 0  #il neurone è attivo solo se la sigmoide è > 0.5
             
         assert(output_pred.shape == (1, m))
             
