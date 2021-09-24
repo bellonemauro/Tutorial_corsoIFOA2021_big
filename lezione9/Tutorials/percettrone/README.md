@@ -4,6 +4,10 @@ Tutorial sviluppato per comprendere il funzionamento di un semplice percettrone 
 
 Il codice è composto da una classe percettrone, ed uno script che istanza l'oggetto nella classe ed effettua il training usando il gradient descent. 
 
+Modello del percettrone implementato 
+
+<img src="https://github.com/bellonemauro/Tutorial_corsoIFOA2021_big/blob/main/lezione9/Tutorials/percettrone/percettrone.png"  width="763" height="277" />
+
 
 Plot dati in ingresso 
 
