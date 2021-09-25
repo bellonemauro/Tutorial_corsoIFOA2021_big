@@ -29,6 +29,10 @@ from percettrone import *
 # entry point
 if __name__ == "__main__": 
 
+    # definisco i parametri di addestramento del percettrone
+    max_num_iterazioni = 100000
+    learning_rate = 0.00005
+
     # Creo un dataset separabile linearmente con 2 features usando sklearn  
     dati, annotazioni = datasets.make_blobs(n_samples = 200, n_features=2, centers=2, random_state=50)  
     #np.random.seed(0) # imposto il random seed per essere sicuro di stare sempre nella stessa condizione
@@ -48,11 +52,11 @@ if __name__ == "__main__":
     plt.title(" Dati generati per training e test ")
     plt.legend(loc="best")
     plt.xlabel("X1")
-    plt.ylabel("Y2")
+    plt.ylabel("X2")
     plt.show()
 
     # istanziamo la classe percettrone
-    percettrone_semplice = percettroneSemplice(_num_input=num_input, _num_iterazioni = 10000, _learning_rate =0.001)
+    percettrone_semplice = percettroneSemplice(_num_input=num_input, _num_iterazioni = max_num_iterazioni, _learning_rate = learning_rate)
 
     # ottimizziamo i parametri in base ai nostri dati di test 
     percettrone_semplice.ottimizza(dati_train, annotazioni_train)

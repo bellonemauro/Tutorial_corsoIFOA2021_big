@@ -23,7 +23,7 @@ class percettroneSemplice():
 
     """
 
-    def __init__(self, _num_input, _num_iterazioni, _learning_rate):
+    def __init__(self, _num_input=1, _num_iterazioni=1, _learning_rate=1):
         """
         Costruttore dell'oggetto percettrone.
         Inizia le variabili membro della classe e include l'inizializzazione random dei pesi
