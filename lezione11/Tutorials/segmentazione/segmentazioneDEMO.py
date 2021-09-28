@@ -104,7 +104,6 @@ def unet_model(output_channels:int):
     last = tf.keras.layers.Conv2DTranspose(
         filters=output_channels, kernel_size=3, strides=2,
         padding='same')  #64x64 -> 128x128
-    # come al solito, il numero di output dell'ultimo livello è settato con il numero di classi desiderate 
 
     x = last(x)
 
@@ -138,13 +137,13 @@ class DisplayCallback(tf.keras.callbacks.Callback):
 
 
 def add_sample_weights(image, label):
-    # The weights for each class, with the constraint that:
+    # I pesi per ogni classe con il vincolo che:
     #     sum(class_weights) == 1.0
     class_weights = tf.constant([2.0, 2.0, 1.0])
     class_weights = class_weights/tf.reduce_sum(class_weights)
 
-    # Create an image of `sample_weights` by using the label at each pixel as an 
-    # index into the `class weights` .
+    # Crea una immagine di `sample_weights` usando le labels per ogni pixel come un 
+    # indice nella `class weights` .
     sample_weights = tf.gather(class_weights, indices=tf.cast(label, tf.int32))
 
     return image, label, sample_weights
@@ -185,8 +184,6 @@ if __name__ == '__main__':
         display([sample_image, sample_mask])
 
 
-    
-
     # Il modello di base è una rete pre-addestrata - MobileNetV2 - già disponibile in tf.keras.applications. 
     # L'encoder sarà quindi esattamente l'output di questa rete, anche in considerazione dei livelli intermedi di questa rete 
     # NOTA: l'encoder non viene addestrato durante il processo di training.
@@ -207,44 +204,41 @@ if __name__ == '__main__':
     # i parametri dell'encoder non vengono modificati
     down_stack.trainable = False
 
-    # The decoder/upsampler is simply a series of upsample blocks implemented in TensorFlow examples
+    # Il modello decoder/upsampler è semplicemente una serie di blocch di upsample che sono già implementati 
     up_stack = [
         pix2pix.upsample(512, 3),  # 4x4 -> 8x8
         pix2pix.upsample(256, 3),  # 8x8 -> 16x16
         pix2pix.upsample(128, 3),  # 16x16 -> 32x32
         pix2pix.upsample(64, 3),   # 32x32 -> 64x64
-    ]
+    ] 
+    # il modello Pix2Pix è una Generative Adversarial Network, o GAN, 
+    # e progettato per traduzioni generiche immagine-a-immagine.  
+    # Un modelo di discriminazione è addestato per classificare immagini reali (da un dataset) da immagini false (generate), 
+    # e il generatore è addestrato per ingannare il discriminatore.
 
 
-    # addestramo il modello 
-    # Now, all that is left to do is to compile and train the model.
-
-    # SInce this is a multiclass classification problem a CetegforicalCrossentropy 
-    # with from_logits=True is the standard loss function. 
-    # Use losses.SparseCategoricalCrossentropy(from_logits=True) 
-    # since the labels are scalar integers instead of vecrtors of scores fror scores for each class .for each pixel.
-
-    # When running inference, the label assigned to the pixel is the channel with the highest value.
-    # This is what the create_mask function is doing.
+    # istanziamo il modello 
     OUTPUT_CLASSES = 3
-
     model = unet_model(output_channels=OUTPUT_CLASSES)
+
+    # Dato che questo è un problema di classificazione multiclasse usiamo a CetegoricalCrossentropy 
+    # con l'argomento from_logits=True come funzione di loss. 
+    # Inoltre usiamo losses.SparseCategoricalCrossentropy(from_logits=True) 
+    # dato che le annotazioni sono compste da vettori scalari di interi per ogni classe e per ogni pixel.
+    # Quando avviamo la procedura di inferenza, l'annotazione assegnata al pixel corrisponde al canale con il valore più alto.
     model.compile(optimizer='adam',
                 loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                 metrics=['accuracy'])
 
-    # Have a quick look at the resulting model architecture:
-    tf.keras.utils.plot_model(model, show_shapes=True)
-
-    # visualizziamo le predizioni
+    # visualizziamo la prima predizione iniziale (pre-training)
     show_predictions()
-
 
 
     EPOCHS = 20
     VAL_SUBSPLITS = 5
     VALIDATION_STEPS = info.splits['test'].num_examples//BATCH_SIZE//VAL_SUBSPLITS
 
+    # avviamo la procedura di training
     model_history = model.fit(train_batches, epochs=EPOCHS,
                             steps_per_epoch=STEPS_PER_EPOCH,
                             validation_steps=VALIDATION_STEPS,
@@ -254,6 +248,7 @@ if __name__ == '__main__':
     loss = model_history.history['loss']
     val_loss = model_history.history['val_loss']
 
+    # plottiamo la loss sulla validazione e sul training
     plt.figure()
     plt.plot(model_history.epoch, loss, 'r', label='Loss - Training')
     plt.plot(model_history.epoch, val_loss, 'bo', label='Loss - Validazione')
@@ -264,37 +259,5 @@ if __name__ == '__main__':
     plt.legend()
     plt.show()
 
-
+    # mostriamo qulche predizione sul batch di test
     show_predictions(test_batches, 3)
-
-
-    try:
-        model_history = model.fit(train_batches, epochs=EPOCHS,
-                                steps_per_epoch=STEPS_PER_EPOCH,
-                                class_weight = {0:2.0, 1:2.0, 2:1.0})
-        assert False
-    except Exception as e:
-        print(f"Expected {type(e).__name__}: {e}")      
-
-
-
-    label = [0,0]
-    prediction = [[-3., 0], [-3, 0]] 
-    sample_weight = [1, 10] 
-
-    loss = tf.losses.SparseCategoricalCrossentropy(from_logits=True,
-                                                reduction=tf.losses.Reduction.NONE)
-    loss(label, prediction, sample_weight).numpy()
-
-    train_batches.map(add_sample_weights).element_spec
-
-    weighted_model = unet_model(OUTPUT_CLASSES)
-    weighted_model.compile(
-        optimizer='adam',
-        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-        metrics=['accuracy'])
-
-    weighted_model.fit(
-        train_batches.map(add_sample_weights),
-        epochs=1,
-        steps_per_epoch=10)
