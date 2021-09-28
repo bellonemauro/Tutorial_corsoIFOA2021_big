@@ -10,4 +10,4 @@ Eseguire il codice lanciando lo script:
 
 Plot annotazioni generate per il dataset di esempio in fase di test:
 
-<img src="https://github.com/bellonemauro/Tutorial_corsoIFOA2021_big/blob/main/lezione10/Tutorials/CIFAR10_lineare/screen_result.png"  width="879" height="402" />
+<img src="https://github.com/bellonemauro/Tutorial_corsoIFOA2021_big/blob/main/lezione10/Tutorials/MNIST/screen_result.png"  width="823" height="285" />
