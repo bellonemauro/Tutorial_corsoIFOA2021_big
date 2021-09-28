@@ -9,4 +9,4 @@ Eseguire il codice lanciando lo script:
 
 
 
-<img src="https://github.com/bellonemauro/Tutorial_corsoIFOA2021_big/blob/main/lezione11/Tutorials/segmentazione/screen_result.png"  width="823" height="285" />
+<img src="https://github.com/bellonemauro/Tutorial_corsoIFOA2021_big/blob/main/lezione11/Tutorials/segmentazione/segmentazioneGIF.git"  width="1180" height="380" />
