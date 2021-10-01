@@ -20,8 +20,6 @@ print(__doc__)
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-import time
-import copy
 
 # importo librerie di torch
 import torch
@@ -31,6 +29,8 @@ import torch.nn.functional as F
 import torchvision
 from torchvision import datasets, models, transforms
 from torch.optim.lr_scheduler import StepLR
+
+from data_loader import *
 
 def visulizzaBatch(_immagini, _annotazioni):
     """
@@ -69,17 +69,18 @@ def train(modello, device, train_loader, criterio, ottimizzatore, epoch):
 
     modello.train() # impostiamo il modello in modalità "train", questo è ereditato e permette di modificare i pesi
 
-    for batch_idx, (data, annotazione) in enumerate(train_loader): # per tutti i dati
-        
-        data, annotazione = data.to(device), annotazione.to(device) # uso il data loader per caricare una coppia dato-annotazione
+    #for batch_idx, (data, annotazione) in enumerate(train_loader): # per tutti i dati
+    for batch_idx, esempi in enumerate(train_loader): # per tutti i dati
+        #data, annotazione = data.to(device), annotazione.to(device) # uso il data loader per caricare una coppia dato-annotazione
+        data, annotazione = esempi['immagine'].to(device), esempi['annotazione'].to(device, dtype=torch.int64) # uso il data loader per caricare una coppia dato-annotazione
         ottimizzatore.zero_grad() # il gradiente deve essere azzerato ad ogni iterazione 
         output = modello(data)  # passo in avanti
         loss = criterio(output, annotazione) # calcolo la loss
         loss.backward()       # passo indietro
         ottimizzatore.step()      # aggiorno l'ottimizzatore 
         
-        # Stampo delle statistiche ogni 1000 campioni (1000 è il mio intervallo di log)
-        if batch_idx % 1000 == 0:
+        # Stampo delle statistiche ogni 20 campioni (20 è il mio intervallo di log)
+        if batch_idx % 20 == 0:
             print('Epoca di training: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(train_loader.dataset),
                 100. * batch_idx / len(train_loader), loss.item()))
@@ -99,12 +100,16 @@ def test(_modello, _device, _test_loader, _criterio, _visualizza_risultato=False
     test_loss = 0
     correct = 0
     with torch.no_grad():
-        for data, target in _test_loader:
-            data, target = data.to(_device), target.to(_device)
+        #for data, annotazione in _test_loader:
+        for esempio in _test_loader:
+            #data, annotazione = data.to(_device), annotazione.to(_device)
+            data, annotazione = esempio['immagine'].to(device), esempio['annotazione'].to(device, dtype=torch.int64)
+            
+
             output = _modello(data)
-            test_loss += _criterio(output, target).item()  # sum up batch loss
-            pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
-            correct += pred.eq(target.view_as(pred)).sum().item()
+            test_loss += _criterio(output, annotazione).item()  # sommiamo la loss di ogni batch
+            pred = output.argmax(dim=1, keepdim=True)  # consideramo l'indice della massima probabilità di classe
+            correct += pred.eq(annotazione.view_as(pred)).sum().item()
             if (_visualizza_risultato):
                 visulizzaBatch(torchvision.utils.make_grid(data[:,:,:]), torch.max(output[:],dim=1) )
 
@@ -137,38 +142,60 @@ if __name__ == '__main__':
 
     # Data augmentation and normalization for training
     # Just normalization for validation
-    data_transforms = {
-        'train': transforms.Compose([
-            transforms.RandomResizedCrop(224),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        ]),
-        'val': transforms.Compose([
-            transforms.Resize(256),
-            transforms.CenterCrop(224),
-            transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        ]),
-    }
+    usa_custom_data_loader = True
+    if (usa_custom_data_loader == False):
+        data_transforms = {
+            'train': transforms.Compose([
+                transforms.RandomResizedCrop(224),
+                transforms.RandomHorizontalFlip(),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            ]),
+            'val': transforms.Compose([
+                transforms.Resize(256),
+                transforms.CenterCrop(224),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            ]),
+        }
 
-    data_dir = './data/hymenoptera_data'
-    image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x),
-                                            data_transforms[x])
+        
+        data_dir = './data/hymenoptera_data'
+        image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x),
+                                                data_transforms[x])
+                        for x in ['train', 'val']}
+        dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=4,
+                                                    shuffle=True, num_workers=0)
                     for x in ['train', 'val']}
-    dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=4,
-                                                shuffle=True, num_workers=0)
-                for x in ['train', 'val']}
-    dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val']}
-    class_names = image_datasets['train'].classes
+        dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val']}
+        class_names = image_datasets['train'].classes
+    else: 
+        info_file_path = './data/file_info.csv'
+        data_dir = './data/hymenoptera_MAURO/'
+        my_data ={x: myDataLoader(  csv_file = info_file_path,
+                                    root_dir = data_dir,
+                                    phase = x,
+                                    num_of_classes = 2,#self.number_of_classes,
+                                    val_batch_idx = 2,
+                                    transform=transforms.Compose([
+                                    MyRescale((224,224)),
+                                    #MyCenterCrop(224),
+                                    MyToTensor(),
+                                    MyNormalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                                    ]))
+                                    for x in ['train', 'val', 'test']}
 
-
+        class_names = my_data['train'].classes
+        dataloaders = {x: torch.utils.data.DataLoader(my_data[x], 
+                                                            batch_size = 4,
+                                                            shuffle=True, num_workers=0)
+                            for x in ['train', 'val']}
     modello = models.resnet18(pretrained=True)
     num_ftrs = modello.fc.in_features
-    # Here the size of each output sample is set to 2.
-    # Alternatively, it can be generalized to nn.Linear(num_ftrs, len(class_names)).
+    # Settiamo la dimensione l'ultimo livello della rete a 2 
+    # in alternativa possiamo generalizzare come nn.Linear(num_ftrs, len(class_names)).
     modello.fc = nn.Linear(num_ftrs, 2)
-
+    
     model_ft = modello.to(device)
 
     criterio = nn.CrossEntropyLoss().to('cuda:0')
@@ -183,7 +210,7 @@ if __name__ == '__main__':
     # inizio il training
     for epoch in range(1, max_epoch + 1):
         train(modello, device, dataloaders['train'], criterio, optimizer, epoch)
-        test(modello, device, dataloaders['val'], criterio, True )
+        test(modello, device, dataloaders['val'], criterio, False )
         scheduler.step()
 
     # per divertimento proviamo a visualizzare qualche risultato
