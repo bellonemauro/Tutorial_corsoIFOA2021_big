@@ -69,9 +69,7 @@ def train(modello, device, train_loader, criterio, ottimizzatore, epoch):
 
     modello.train() # impostiamo il modello in modalità "train", questo è ereditato e permette di modificare i pesi
 
-    #for batch_idx, (data, annotazione) in enumerate(train_loader): # per tutti i dati
     for batch_idx, esempi in enumerate(train_loader): # per tutti i dati
-        #data, annotazione = data.to(device), annotazione.to(device) # uso il data loader per caricare una coppia dato-annotazione
         data, annotazione = esempi['immagine'].to(device), esempi['annotazione'].to(device, dtype=torch.int64) # uso il data loader per caricare una coppia dato-annotazione
         ottimizzatore.zero_grad() # il gradiente deve essere azzerato ad ogni iterazione 
         output = modello(data)  # passo in avanti
@@ -100,9 +98,7 @@ def test(_modello, _device, _test_loader, _criterio, _visualizza_risultato=False
     test_loss = 0
     correct = 0
     with torch.no_grad():
-        #for data, annotazione in _test_loader:
         for esempio in _test_loader:
-            #data, annotazione = data.to(_device), annotazione.to(_device)
             data, annotazione = esempio['immagine'].to(device), esempio['annotazione'].to(device, dtype=torch.int64)
             
 
@@ -128,7 +124,7 @@ if __name__ == '__main__':
     # Training settings
     
     # qualche parametro di training   
-    learning_rate = 0.001
+    learning_rate = 0.0005
     train_batch_size = 8
     test_batch_size = 8
     max_epoch = 3
@@ -142,54 +138,52 @@ if __name__ == '__main__':
 
     # Data augmentation and normalization for training
     # Just normalization for validation
-    usa_custom_data_loader = True
-    if (usa_custom_data_loader == False):
-        data_transforms = {
-            'train': transforms.Compose([
-                transforms.RandomResizedCrop(224),
-                transforms.RandomHorizontalFlip(),
-                transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-            ]),
-            'val': transforms.Compose([
-                transforms.Resize(256),
-                transforms.CenterCrop(224),
-                transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-            ]),
-        }
+    """
+    data_transforms = {
+        'train': transforms.Compose([
+            transforms.RandomResizedCrop(224),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ]),
+        'val': transforms.Compose([
+            transforms.Resize(256),
+            transforms.CenterCrop(224),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ]),
+    }
 
-        
-        data_dir = './data/hymenoptera_data'
-        image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x),
-                                                data_transforms[x])
-                        for x in ['train', 'val']}
-        dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=4,
-                                                    shuffle=True, num_workers=0)
+    
+    data_dir = './data/hymenoptera_data'
+    image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x),
+                                            data_transforms[x])
                     for x in ['train', 'val']}
-        dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val']}
-        class_names = image_datasets['train'].classes
-    else: 
-        info_file_path = './data/file_info.csv'
-        data_dir = './data/hymenoptera_MAURO/'
-        my_data ={x: myDataLoader(  csv_file = info_file_path,
-                                    root_dir = data_dir,
-                                    phase = x,
-                                    num_of_classes = 2,#self.number_of_classes,
-                                    val_batch_idx = 2,
-                                    transform=transforms.Compose([
-                                    MyRescale((224,224)),
-                                    #MyCenterCrop(224),
+    dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=4,
+                                                shuffle=True, num_workers=0)
+                for x in ['train', 'val']}
+    dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val']}
+    class_names = image_datasets['train'].classes
+    """
+    info_file_path = './data/file_info.csv'
+    data_dir = './data/hymenoptera_MAURO/'
+    my_data ={x: myDataLoader(  csv_file = info_file_path,
+                                root_dir = data_dir,
+                                phase = x,
+                                num_of_classes = 2,#self.number_of_classes,
+                                val_batch_idx = 2,
+                                transform=transforms.Compose([                                 
                                     MyToTensor(),
+                                    MyTransforms(224, x),
                                     MyNormalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-                                    ]))
-                                    for x in ['train', 'val', 'test']}
+                                ]))
+                                for x in ['train', 'val', 'test']}
 
-        class_names = my_data['train'].classes
-        dataloaders = {x: torch.utils.data.DataLoader(my_data[x], 
-                                                            batch_size = 4,
-                                                            shuffle=True, num_workers=0)
-                            for x in ['train', 'val']}
+    class_names = my_data['train'].classes
+    dataloaders = {x: torch.utils.data.DataLoader(my_data[x], 
+                                                        batch_size = 4,
+                                                        shuffle=True, num_workers=0)
+                        for x in ['train', 'val']}
     modello = models.resnet18(pretrained=True)
     num_ftrs = modello.fc.in_features
     # Settiamo la dimensione l'ultimo livello della rete a 2 
@@ -210,7 +204,7 @@ if __name__ == '__main__':
     # inizio il training
     for epoch in range(1, max_epoch + 1):
         train(modello, device, dataloaders['train'], criterio, optimizer, epoch)
-        test(modello, device, dataloaders['val'], criterio, False )
+        test(modello, device, dataloaders['val'], criterio, True )
         scheduler.step()
 
     # per divertimento proviamo a visualizzare qualche risultato

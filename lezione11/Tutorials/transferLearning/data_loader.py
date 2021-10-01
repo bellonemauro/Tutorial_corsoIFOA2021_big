@@ -100,7 +100,7 @@ class myDataLoader(Dataset):
             annotazione = np.asarray(1)
 
         immagine = io.imread(os.path.join(self.root_dir, frame_name))
-        
+        immagine = immagine/255
         esempio = {'immagine': immagine, 'annotazione': annotazione}
 
         if self.transform:
@@ -119,7 +119,7 @@ class MyNormalize(object):
     def __init__(self, mean, std):
         #assert isinstance(mean, (float, [float]))
         #assert isinstance(std, (float, [float]))
-        self.mean = mean
+        self.mean = mean 
         self.std = std
 
     def __call__(self, esempio):
@@ -166,35 +166,42 @@ class MyToTensor(object):
 
     def __call__(self, esempio):
         immagine, annotazione = esempio['immagine'], esempio['annotazione']
-        # swap color axis because
-        # numpy image: H x W x C
-        # torch image: C X H X W
+        # scambiamo i colori degli assi in quanto: 
+        # una immagine in numpy è rappresentata come: H x W x C
+        # mentre su torch una immagine è rappresentata come: C X H X W
         immagine = immagine.transpose((2, 0, 1))
         
         return {'immagine': torch.FloatTensor(immagine), 
                 'annotazione': torch.from_numpy(annotazione) }
 
 
-class MyCenterCrop(object):
+class MyTransforms(object):
     """Crop centrale di dimension data .
 
     Args:
         output_size (tuple or int): Dmensione input desiderata.
     """
 
-    def __init__(self, output_size):
+    def __init__(self, output_size, phase):
         assert isinstance(output_size, (int, tuple))
         self.output_size = output_size
+        self.phase = phase
 
     def __call__(self, esempio):
         immagine, annotazione = esempio['immagine'], esempio['annotazione']
 
-        h, w = immagine.shape[:2]
-        h_inizio = int(h-self.output_size/2)
-        h_fine = int(h+self.output_size/2)
-        w_inizio = int(w-self.output_size/2)
-        w_fine = int(w+self.output_size/2)
-        immagine=immagine[h_inizio:h_fine,w_inizio:w_fine,:]
-        
+        if ( self.phase == 'train'):
+    
+            RRC = transforms.RandomResizedCrop(self.output_size)
+            RHF = transforms.RandomHorizontalFlip()
+            immagine = RRC(immagine)
+            immagine = RHF(immagine)
+        else: 
+
+            RES = transforms.Resize(256)
+            CC = transforms.CenterCrop(self.output_size)
+            immagine = RES (immagine)
+            immagine = CC (immagine)
+
         return {'immagine': immagine,
                 'annotazione': annotazione}
