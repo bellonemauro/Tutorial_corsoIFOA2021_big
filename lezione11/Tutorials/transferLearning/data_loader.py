@@ -31,7 +31,7 @@ class myDataLoader(Dataset):
 
         La struttura del file csv di caricamento è atteso nella seguente forma:
         
-            file_name,Class,Batch_index
+            File_name,Class,Batch_index
             0013035.jpg,ants,1
             1030023514_aad5c608f9.jpg,ants,1
             etc.
@@ -93,6 +93,7 @@ class myDataLoader(Dataset):
 
         frame_name = self.lista_dei_dati.iloc[idx,0]
         annotazione = self.lista_dei_dati.iloc[idx, 1]
+        
 
         if (annotazione == self.classes[0]):
             annotazione = np.asarray(0)

@@ -1,7 +1,7 @@
 #  +---------------------------------------------------------------------------+
 #  |                                                                           |
 #  |  IFOA2021 - BIG DATA e Analisi dei Dati                                   |
-#  |  Tutorial : MNIST                                                         |
+#  |  Tutorial : Transfer learning                                             |
 #  |                                                                           |
 #  |  Autore: Mauro Bellone                                                    |
 #  |  Released under BDS License                                               |
@@ -25,11 +25,11 @@ import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torch.nn.functional as F
 import torchvision
-from torchvision import datasets, models, transforms
+from torchvision import models, transforms
 from torch.optim.lr_scheduler import StepLR
 
+# importo il mio data loader customizzato
 from data_loader import *
 
 def visulizzaBatch(_immagini, _annotazioni):
@@ -99,8 +99,7 @@ def test(_modello, _device, _test_loader, _criterio, _visualizza_risultato=False
     correct = 0
     with torch.no_grad():
         for esempio in _test_loader:
-            data, annotazione = esempio['immagine'].to(device), esempio['annotazione'].to(device, dtype=torch.int64)
-            
+            data, annotazione = esempio['immagine'].to(_device), esempio['annotazione'].to(_device, dtype=torch.int64)
 
             output = _modello(data)
             test_loss += _criterio(output, annotazione).item()  # sommiamo la loss di ogni batch
@@ -127,47 +126,18 @@ if __name__ == '__main__':
     test_batch_size = 8
     max_epoch = 3
     gamma = 0.7
-    
-    use_cuda = torch.cuda.is_available()
-
     torch.manual_seed(1)
 
+    use_cuda = torch.cuda.is_available()
     device = torch.device("cuda" if use_cuda else "cpu")
 
-    """
-    data_transforms = {
-        'train': transforms.Compose([
-            transforms.RandomResizedCrop(224),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        ]),
-        'val': transforms.Compose([
-            transforms.Resize(256),
-            transforms.CenterCrop(224),
-            transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        ]),
-    }
-
-    
-    data_dir = './data/hymenoptera_data'
-    image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x),
-                                            data_transforms[x])
-                    for x in ['train', 'val']}
-    dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=4,
-                                                shuffle=True, num_workers=0)
-                for x in ['train', 'val']}
-    dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val']}
-    class_names = image_datasets['train'].classes
-    """
     # implementiamo un data loader customizzato per avere delle trasformazioni 
     info_file_path = './data/file_info.csv'
     data_dir = './data/hymenoptera_MAURO/'
     my_data ={x: myDataLoader(  csv_file = info_file_path,
                                 root_dir = data_dir,
                                 phase = x,
-                                num_of_classes = 2,#self.number_of_classes,
+                                num_of_classes = 2,
                                 val_batch_idx = 2,
                                 transform=transforms.Compose([                                 
                                     MyToTensor(),
@@ -181,6 +151,8 @@ if __name__ == '__main__':
                                                         batch_size = 4,
                                                         shuffle=True, num_workers=0)
                         for x in ['train', 'val']}
+    
+    # Transfer learning 
     modello = models.resnet18(pretrained=True)
     num_ftrs = modello.fc.in_features
     # Settiamo la dimensione l'ultimo livello della rete a 2 
@@ -201,7 +173,7 @@ if __name__ == '__main__':
     # inizio il training
     for epoch in range(1, max_epoch + 1):
         train(modello, device, dataloaders['train'], criterio, optimizer, epoch)
-        test(modello, device, dataloaders['val'], criterio, True )
+        test(modello, device, dataloaders['val'], criterio, False )
         scheduler.step()
 
     # per divertimento proviamo a visualizzare qualche risultato
