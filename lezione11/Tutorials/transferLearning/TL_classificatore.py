@@ -120,8 +120,6 @@ def test(_modello, _device, _test_loader, _criterio, _visualizza_risultato=False
     
 # entry point
 if __name__ == '__main__':
-
-    # Training settings
     
     # qualche parametro di training   
     learning_rate = 0.0005
@@ -136,8 +134,6 @@ if __name__ == '__main__':
 
     device = torch.device("cuda" if use_cuda else "cpu")
 
-    # Data augmentation and normalization for training
-    # Just normalization for validation
     """
     data_transforms = {
         'train': transforms.Compose([
@@ -165,6 +161,7 @@ if __name__ == '__main__':
     dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val']}
     class_names = image_datasets['train'].classes
     """
+    # implementiamo un data loader customizzato per avere delle trasformazioni 
     info_file_path = './data/file_info.csv'
     data_dir = './data/hymenoptera_MAURO/'
     my_data ={x: myDataLoader(  csv_file = info_file_path,

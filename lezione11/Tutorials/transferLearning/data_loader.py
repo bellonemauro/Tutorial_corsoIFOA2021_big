@@ -100,7 +100,7 @@ class myDataLoader(Dataset):
             annotazione = np.asarray(1)
 
         immagine = io.imread(os.path.join(self.root_dir, frame_name))
-        immagine = immagine/255
+        immagine = immagine/255 #normalizza in 0-1
         esempio = {'immagine': immagine, 'annotazione': annotazione}
 
         if self.transform:
@@ -197,7 +197,6 @@ class MyTransforms(object):
             immagine = RRC(immagine)
             immagine = RHF(immagine)
         else: 
-
             RES = transforms.Resize(256)
             CC = transforms.CenterCrop(self.output_size)
             immagine = RES (immagine)
