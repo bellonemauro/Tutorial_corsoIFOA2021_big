@@ -24,6 +24,7 @@ import os
 # importo librerie di torch
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import torch.optim as optim
 import torchvision
 from torchvision import models, transforms
@@ -106,6 +107,9 @@ def test(_modello, _device, _test_loader, _criterio, _visualizza_risultato=False
             pred = output.argmax(dim=1, keepdim=True)  # consideramo l'indice della massima probabilità di classe
             correct += pred.eq(annotazione.view_as(pred)).sum().item()
             if (_visualizza_risultato):
+                probability = F.softmax(output, dim=1 )
+                       
+                print( np.round( probability.to('cpu').numpy(),2 ))
                 visulizzaBatch(torchvision.utils.make_grid(data[:,:,:]), torch.max(output[:],dim=1) )
 
     test_loss /= len(_test_loader.dataset)
