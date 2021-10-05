@@ -1,7 +1,7 @@
 #  +---------------------------------------------------------------------------+
 #  |                                                                           |
 #  |  IFOA2021 - BIG DATA e Analisi dei Dati                                   |
-#  |  Tutorial : LSTM                                                         |
+#  |  Tutorial : LSTM                                                          |
 #  |                                                                           |
 #  |  Autore: Mauro Bellone                                                    |
 #  |  Released under BDS License                                               |
@@ -17,6 +17,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns # solo per avere lo sfondo nero sui grafici
 
 import torch
+from torch.optim.lr_scheduler import StepLR
+
 from sklearn.preprocessing import MinMaxScaler # per normalizzare
 import math, time
 from sklearn.metrics import mean_squared_error
@@ -42,14 +44,14 @@ def split_data(stock, lookback):
     # e numero di colonne pari a lookback (c'è ridondanza di informazione)
 
     data = np.array(data)
-    test_set_size = int(np.round(0.2*data.shape[0]))
+    test_set_size = int(np.round(0.1*data.shape[0])) # prendo solo il 20% dei dati per il test
     train_set_size = data.shape[0] - (test_set_size)
     
-    x_train = data[:train_set_size,:-1,:]
-    y_train = data[:train_set_size,-1,:]
+    x_train = data[:train_set_size, :-1,:]
+    y_train = data[:train_set_size, -1,:]
     
-    x_test = data[train_set_size:,:-1]
-    y_test = data[train_set_size:,-1,:]
+    x_test = data[train_set_size:, :-1]
+    y_test = data[train_set_size:, -1,:]
     
     return [x_train, y_train, x_test, y_test]
 
@@ -93,6 +95,7 @@ def plot_training_result (_original_train, _predict_train, _original_test, _pred
     ax.set_xticklabels('', size=10)
     plt.show()
  
+
 # entry point
 if __name__ == '__main__':
     # parametri di training
@@ -100,14 +103,18 @@ if __name__ == '__main__':
     hidden_dim = 64  # best 64
     num_layers = 2
     output_dim = 1
-    max_num_epoche = 50
+    max_num_epoche = 200
+    learning_rate = 0.009
+    gamma = 0.7
+    scheduler_step_size = 50
     # scegliamo la lunghezza della sequenza dei dati da analizzare per ogni predizione, 
     # questo rappresenta il numero di passi indietro 
     lookback = 40 
 
     # carico dei dati
-    filepath = './TSLA-2014-12-27-2019-12-27.csv'
+    filepath = './NVDA_2021-09-26.csv'#'./TSLA-2014-12-27-2019-12-27.csv'
     data = pd.read_csv(filepath, delimiter=',',usecols=['Date','Open','High','Low','Close'])
+    data = data[(data['Date'] > '2015-01-01')]
     #data = data.sort_values('Date',ascending=True)
     # stampiamo qualcosa dei dati a schermo
     print(data.head())
@@ -118,8 +125,9 @@ if __name__ == '__main__':
     # normalizziamo i dati
     scaler = MinMaxScaler(feature_range=(-1, 1))
     price['Close'] = scaler.fit_transform(price['Close'].values.reshape(-1,1))
-
+    input("DEBUG INFO: this line gives a warning")
     x_train, y_train, x_test, y_test = split_data(price, lookback)
+
 
     # trasformiamo tutti i dati in tensori di pytorch
     x_train = torch.from_numpy(x_train).type(torch.Tensor)
@@ -130,32 +138,35 @@ if __name__ == '__main__':
     y_test_gru = torch.from_numpy(y_test).type(torch.Tensor)
 
     # istanziamo il modello 
-    model = MauroLSTM(input_dim=input_dim, hidden_dim=hidden_dim, output_dim=output_dim, num_layers=num_layers)
-    criterion = torch.nn.MSELoss(reduction='mean')
-    optimiser = torch.optim.Adam(model.parameters(), lr=0.007)
+    modello = MauroLSTM(input_dim=input_dim, hidden_dim=hidden_dim, output_dim=output_dim, num_layers=num_layers)
+    criterio = torch.nn.MSELoss(reduction='mean')
+    ottimizzatore = torch.optim.Adam(modello.parameters(), lr=learning_rate)
 
     vettore_loss = np.zeros(max_num_epoche)
     start_time = time.time()
     lstm = []
+    scheduler = StepLR(ottimizzatore, step_size=scheduler_step_size, gamma=gamma)
 
     # ciclo di training
     for t in range(max_num_epoche):
-        y_train_pred = model(x_train)
 
-        loss = criterion(y_train_pred, y_train_lstm)
+        y_train_pred = modello(x_train) # passo in avanti
+
+        loss = criterio(y_train_pred, y_train_lstm)
         print("Epoca ", t, "MSE: ", loss.item())
         vettore_loss[t] = loss.item()
 
-        optimiser.zero_grad()
+        ottimizzatore.zero_grad()
         loss.backward()
-        optimiser.step()
+        ottimizzatore.step()
+        scheduler.step()
         
     training_time = time.time()-start_time
     print("Durata del training: {}".format(training_time))
 
 
     # Inferenza 
-    y_test_pred = model(x_test)
+    y_test_pred = modello(x_test)  # passo in avanti
 
     # Invertiamo le predizioni per la normalizzazione dello scaler 
     y_train_pred = scaler.inverse_transform(y_train_pred.detach().numpy())
@@ -172,7 +183,7 @@ if __name__ == '__main__':
     lstm.append(trainScore)
     lstm.append(testScore)
     lstm.append(training_time)
-
+    
     # per plottare tramite dataframe
     original_train = pd.DataFrame(y_train)
     predict_train = pd.DataFrame(y_train_pred)
