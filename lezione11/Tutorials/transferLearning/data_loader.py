@@ -21,10 +21,7 @@ from skimage import io, transform
 class myDataLoader(Dataset):
     """Data loader di esempio per immagini 
 
-        This dataset is built to load patient data from a dataset of ultrasonic CSV frames. 
         
-        
-
         Struttura della cartella attesa : 
         ./data/hymenoptera_MAURO/nome_immagine.ext 
         file_info.csv ----> file che contene i metadata per il data loader 
